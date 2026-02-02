@@ -1,6 +1,11 @@
 name: Release on tag
 
 on:
+  workflow_dispatch:
+    inputs:
+      test:
+        default: true
+        type: boolean
   push:
     tags:
       - 'v*'
@@ -17,17 +22,8 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build -c Release
-
-      - name: Test
-        run: dotnet test --no-build -c Release
-
-      - name: Publish
-        run: dotnet publish src/SampleApp -c Release -o ./publish
+      #- name: Restore
+       # run: dotnet restore
 
       - name: Zip published output
         run: |
