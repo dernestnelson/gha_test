@@ -1,4 +1,4 @@
-name: CI
+name: CD
 
 on:
   workflow_dispatch:
@@ -7,16 +7,11 @@ on:
         default: true
         type: boolean
   push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
+    tags:
+      - 'v*'
 
 jobs:
-  build:
+  release:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -27,20 +22,25 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: dotnet restore src/SampleApp/SampleApp.csproj
+      - name: Zip published output
+        run: |
+          zip -r sampleapp-${{ github.ref_name }}.zip ./publish
 
-      - name: Build
-        run: dotnet build src/SampleApp/SampleApp.csproj --configuration Release --no-restore
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
 
-      - name: Test
-        run: dotnet test src/SampleApp/SampleApp.csproj --no-build --verbosity normal
-
-      - name: Publish
-        run: dotnet publish src/SampleApp/SampleApp.csproj -c Release -o ./publish
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: sampleapp
           path: ./publish
