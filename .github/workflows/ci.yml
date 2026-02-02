@@ -1,6 +1,11 @@
 name: CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      test:
+        default: true
+        type: boolean
   push:
     branches:
       - main
