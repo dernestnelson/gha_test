@@ -28,16 +28,16 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore src/SampleApp/SampleApp.csproj
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build src/SampleApp/SampleApp.csproj --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test src/SampleApp/SampleApp.csproj --no-build --verbosity normal
 
       - name: Publish
-        run: dotnet publish src/SampleApp -c Release -o ./publish
+        run: dotnet publish src/SampleApp/SampleApp.csproj -c Release -o ./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
