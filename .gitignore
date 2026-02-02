@@ -52,3 +52,22 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Visual Studio / .NET
+bin/
+obj/
+publish/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.ide
+*.log
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# Rider
+.idea/
