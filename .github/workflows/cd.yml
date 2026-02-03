@@ -24,7 +24,7 @@ jobs:
 
       - name: Zip published output
         run: |
-          zip -r sampleapp-${{ github.ref_name }}.zip ./publish
+          Compress-Archive -Path .\publish\* -DestinationPath "sampleapp-${{ github.ref_name }}.zip"
 
       - name: Create GitHub Release
         id: create_release
